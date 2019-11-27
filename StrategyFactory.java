@@ -17,6 +17,8 @@ public class StrategyFactory {
             return new StrategyTitForTat();
         } else if (strategyName.equals("TitForTwoTats")) {
             return new StrategyTitForTwoTats();
+        } else if (strategyName.equals("WeightedTree")) {
+            return new StrategyWeightedTree();
         } else {
             return null;
         }
