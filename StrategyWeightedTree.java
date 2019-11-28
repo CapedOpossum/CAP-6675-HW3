@@ -205,23 +205,23 @@ public class StrategyWeightedTree extends Strategy {
                     theirAction
                 );
                 ProbabilityMatrix nextProbs = startingProbs.generateUpdate(theirAction);
-                System.out.println(
-                    "At depth (" +
-                    (5 - depth) +
-                    ") the action pair (" +
-                    ActionSet.ActionToString(ourAction) +
-                    "," +
-                    ActionSet.ActionToString(theirAction) +
-                    ") is being evaluated."
-                );
+                // System.out.println(
+                //     "At depth (" +
+                //     (5 - depth) +
+                //     ") the action pair (" +
+                //     ActionSet.ActionToString(ourAction) +
+                //     "," +
+                //     ActionSet.ActionToString(theirAction) +
+                //     ") is being evaluated."
+                // );
                 ValueActionPair childResult = this.evaluateNode(successor, nextProbs, depth - 1);
                 childResult.updateWithBias(startingProbs.getColumnBias());
                 childResult.setAction(ourAction);
                 if (childResult.betterThan(result)) {
-                    System.out.println("New eval " + childResult + " better than current " + result);
+                    // System.out.println("New eval " + childResult + " better than current " + result);
                     result = childResult;
                 } else {
-                    System.out.println("Current " + result + " better than new eval " + childResult);
+                    // System.out.println("Current " + result + " better than new eval " + childResult);
                 }
             }
         }
