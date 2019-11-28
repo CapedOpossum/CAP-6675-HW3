@@ -1,4 +1,4 @@
-= UCF Fall 2019 CAP 6675 Homework #3: Iterated Prisoners Dilemma
+# UCF Fall 2019 CAP 6675 Homework #3: Iterated Prisoners Dilemma
 
 This repository contains the work done by our team in response to homework
 assignment #3 in Dr. Annie Wu's Fall 2019 session of CAP 6675: Complex Adaptive
@@ -7,7 +7,7 @@ Systems.
 The majority of the code was as given to the team by Dr. Wu. The primary
 contribution from our team is the addition of the class `StrategyWeightedTree`.
 
-== Compiling
+## Compiling
 
 To compile, simply run `javac` against the `RunIPD.java` class:
 
@@ -16,7 +16,7 @@ To compile, simply run `javac` against the `RunIPD.java` class:
 After repeated code edits, it may be necessary to erase all `.class` files, as
 the bare `javac` compiler has some trouble properly identifying dependencies.
 
-== Running
+## Running
 
 The baseline version of this software only required a single command-line
 argument when running: the number of iterations to do. That baseline version
