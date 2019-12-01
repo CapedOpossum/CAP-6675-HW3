@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+\usepackage{times}
+\usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{natbib}
+\usepackage[font={small,sf},labelfont=bf]{caption}
+\usepackage{listings}
+\usepackage{fancybox}
+\usepackage{enumerate}
+\usepackage[inline,shortlabels]{enumitem}
+\setlength \parindent{0pt}
+\setlength \parskip{1em}
+\DeclareMathOperator{\atantwo}{atan2}
+\newlength{\mylength}
+\newenvironment{FramedEqn}%
+  {\setlength{\fboxsep}{15pt}
+    \setlength{\mylength}{\linewidth}%
+    \addtolength{\mylength}{-1\fboxsep}%
+    \addtolength{\mylength}{-2\fboxrule}%
+    \Sbox
+    \minipage{\mylength}%
+      \setlength{\abovedisplayskip}{0pt}%
+      \setlength{\belowdisplayskip}{0pt}%
+      \equation}%
+  {\endequation\endminipage\endSbox\[\fbox{\TheSbox}\]}
+
+
+\begin{document}
+\lstset{
+  basicstyle=\footnotesize\ttfamily
+}
+
+\section{Weighted Tree}
+The \emph{Weighted Tree} algorithm developed for implementing a prisoner's dilemma strategy is loosely based on the classic \emph{Expectimax} algorithm used to implement artificial intelligence game opponents in both zero-sum and general games. The algorithm attempts to guess what an opponent will do in the future, and based on that estimation it attempts to \emph{maximize} its \emph{expected} return.\par
+
+The basic elements required for the algorithm are a probability distribution $P_i(a_i)$ at game iteration $i$ describing the chance associated with all available actions $a_i \in A_i$, and an evaluation function $e(i)$ that yields the ``perceived value'' of the game for the player at iteration $i$. Normally, \emph{Expetimax} attempts to evaluate future actions until one of two stop conditions occur:
+\begin{enumerate*}[(1)]
+    \item one of the players wins, or
+    \item a prescribed evaluation depth is reached.
+\end{enumerate*}
+In the case of Iterated Prisoner's Dilemma (IPD), however, the first stop condition would never be reached, since a ``game'' is over after both players simultaneously execute their one and only move. Thus, for IPD, the algorithm is set to only (and always) evaluate up to a specific depth. In addition, the ``perceived value'' is simply the accumulated score over the iterations evaluated.\par
+
+Baseline \emph{Expectimax} sets no rule on the probability distribution describing the action chances at every evaluation point. Indeed, most implementations begin with an even distribution across all available actions. The \emph{Weighted Tree} algorithm begins with such an egalitarian position at the beginning of a session. The algorithm does, however, attempt to encode prior knowledge into said probability distribution. This is done by positively (and permanently, at least through the end of the session) biasing the probability of the last prior action by a fixed constant $\eta = 1\%$ at the expense of the action(s) not taken (i.e., $P(a)$ does not remain constant throughout the game session, but rather evolves as the opponent makes moves). In the case of IPD, since there are always exactly two actions available (either \texttt{DISSENT} or \texttt{COOPERATE}), such probability distribution updates are easy to do.\par
+
+Implementation of an agent strategy using \emph{Weighted Tree} primarily involves making an action decision based on the concurrent evaluation of all available option combinations. In essence, the algorithm ``plays out'' all possible options starting from the current actual game state, and based on their relative perceived value, chooses the immediate path based on expected return. The evaluation manifests as a perennially evolving tree with $|A|^n$ nodes at level $n$ for action set $A$. In the case of IPD $|A|=2$, and the evaluation tree depth is capped at $5$. Unlike \emph{Expectimax}, however, which is typically geared to turn-based games, each level does not signify the game state after an individual player's action. Instead, each level represents the game state after \emph{all} players (2 in the case of IPD) have executed their action. Once the evaluation stop condition is reached, each of the perceived values goes through a discounted maximization back to the level just below the tree root. The node holding the maximum expected value below the root indicates the action the agent should take.\par
+
+The discounted maximization involves starting from the accumulated scores at the tree leaves, multiplying each by the probability assigned to the action that led to the score, and picking the maximum of the two as the parent node's perceived value. As this process ``bubbles up'' to the root node, the perceived value will shrink from its leaf value. Multiplying the perceived value with the probability affords the algorithm the ability to blend the expected return with the probability of receiving said return. A low probability, high reward path will probably look worse than a high probability, lower reward path. Recalling the evaluation function at level $i$ being $e(i)$ and the probability distribution for action set $a_i \in A_i$ is $P_i(a)$, the recursive tree evaluation can be expressed as shown in Equation \ref{eq:wt_eval}.\par
+
+\begin{equation}
+    f(a, i) =
+    \begin{cases}
+        \max\limits_a (f(a, i + 1)P_i(a)) & i < 5 \\
+        e(i) & i = 5
+    \end{cases}
+    \forall a \in A
+    \label{eq:wt_eval}
+\end{equation}
+
+Although \emph{Weighted Tree} makes assumptions as it evaluates the player's next move by ``looking into the future,'' the validity of these assumptions (i.e., the traversal and evaluation of the tree) is not matched up against actual events, as the evaluated tree is in effect destroyed once a decision is made.\par
+
+\end{document}
