@@ -36,7 +36,7 @@
 }
 
 \section{Weighted Tree}
-The \emph{Weighted Tree} algorithm developed for implementing a prisoner's dilemma strategy is loosely based on the classic \emph{Expectimax} algorithm used to implement artificial intelligence game opponents in both zero-sum and general games. The algorithm attempts to guess what an opponent will do in the future, and based on that estimation it attempts to \emph{maximize} its \emph{expected} return.\par
+The \emph{Weighted Tree} algorithm developed for implementing a prisoner's dilemma strategy is loosely based on the classic \emph{Expectimax} adversarial search algorithm used to implement artificial intelligence game opponents in both zero-sum and general games. The algorithm attempts to guess what an opponent will do in the future, and based on that estimation it attempts to \emph{maximize} its \emph{expected} return.\par
 
 The basic elements required for the algorithm are a probability distribution $P_i(a_i)$ at game iteration $i$ describing the chance associated with all available actions $a_i \in A_i$, and an evaluation function $e(i)$ that yields the ``perceived value'' of the game for the player at iteration $i$. Normally, \emph{Expetimax} attempts to evaluate future actions until one of two stop conditions occur:
 \begin{enumerate*}[(1)]
